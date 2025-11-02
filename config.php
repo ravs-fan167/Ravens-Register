@@ -2,7 +2,7 @@
 $host = "localhost";
 $user = "root";
 $pass = "";
-$db   = "s1_ravens";
+$db   = "test";
 
 $conn = new mysqli($host, $user, $pass, $db);
 if ($conn->connect_error) {
