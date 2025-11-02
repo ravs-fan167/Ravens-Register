@@ -3,59 +3,56 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>RAVENS ROLEPLAY v3 - Register</title>
+  <title>RAVENS ROLEPLAY - UCP Panel</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    .brand-gradient { background: linear-gradient(90deg,#7dd3fc,#38bdf8); }
-    body { 
-      background: linear-gradient(135deg, #0f172a, #1e293b, #7dd3fc, #ef4444);
-      background-size: 400% 400%;
-      animation: gradientMove 15s ease infinite;
-    }
-    @keyframes gradientMove {
-      0% {background-position: 0% 50%;}
-      50% {background-position: 100% 50%;}
-      100% {background-position: 0% 50%;}
-    }
-  </style>
 </head>
-<body class="min-h-screen text-slate-100 font-sans">
-  <header class="w-full shadow-sm bg-black/60 backdrop-blur sticky top-0 z-40">
-    <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <img src="profile.png" alt="Ravens Logo" class="w-10 h-10 rounded-full border border-slate-200">
-        <div>
-          <div class="text-lg font-semibold text-white">RAVENS Roleplay</div>
-          <div class="text-xs text-slate-400">Server & Community</div>
-        </div>
-      </div>
-    </div>
-  </header>
-  <section id="register" class="py-20">
-    <div class="max-w-md mx-auto px-4 text-center">
-      <h1 class="text-3xl font-extrabold text-white mb-4">Daftar Akun Game</h1>
-      <p class="text-slate-300 mb-6">Isi formulir di bawah ini untuk membuat akun game kamu.</p>
-      <form id="registerForm" class="space-y-4 bg-white/10 p-6 rounded-xl shadow-md">
-        <input type="text" id="username" name="username" placeholder="Username Game" required class="w-full px-4 py-2 rounded-md text-black" />
-        <input type="password" id="password" name="password" placeholder="Password" required class="w-full px-4 py-2 rounded-md text-black" />
-        <input type="text" id="email" name="email" placeholder="Email (opsional)" class="w-full px-4 py-2 rounded-md text-black" />
-        <button type="submit" class="w-full px-4 py-2 bg-sky-500 hover:bg-sky-600 rounded-md font-semibold">Daftar Sekarang</button>
-      </form>
-      <p id="result" class="mt-4 text-sm text-green-400"></p>
-    </div>
-  </section>
+<body class="min-h-screen bg-slate-900 text-white flex flex-col items-center justify-center">
+  <div class="bg-white/10 p-8 rounded-xl shadow-xl w-full max-w-md text-center">
+    <h1 class="text-2xl font-bold mb-4">🕊️ RAVENS ROLEPLAY - UCP PANEL</h1>
+    <p class="text-sm text-slate-300 mb-6">Buat akun UCP baru atau cek kode verifikasi kamu di sini.</p>
+
+    <!-- Form buat kode -->
+    <form id="createForm" class="space-y-3">
+      <input type="text" id="ucp_create" name="ucp" placeholder="Masukkan Nama UCP" required class="w-full px-4 py-2 rounded-md text-black" />
+      <button type="submit" class="w-full py-2 bg-sky-500 hover:bg-sky-600 rounded-md font-semibold">Buat Verify Code</button>
+    </form>
+
+    <hr class="my-6 border-slate-600">
+
+    <!-- Form cek kode -->
+    <form id="checkForm" class="space-y-3">
+      <input type="text" id="ucp_check" name="ucp" placeholder="Masukkan Nama UCP" required class="w-full px-4 py-2 rounded-md text-black" />
+      <button type="submit" class="w-full py-2 bg-green-500 hover:bg-green-600 rounded-md font-semibold">Cek Verify Code</button>
+    </form>
+
+    <div id="result" class="mt-6 text-green-400 font-mono"></div>
+  </div>
+
   <script>
-  document.getElementById('registerForm').addEventListener('submit', async (e) => {
+  // Handle Buat Code
+  document.getElementById('createForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const form = e.target;
-    const data = new URLSearchParams(new FormData(form));
+    const ucp = document.getElementById('ucp_create').value.trim();
     const res = await fetch('register.php', {
       method: 'POST',
       headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-      body: data
+      body: 'action=create&ucp=' + encodeURIComponent(ucp)
     });
     const text = await res.text();
-    document.getElementById('result').innerText = text;
+    document.getElementById('result').innerHTML = text;
+  });
+
+  // Handle Cek Code
+  document.getElementById('checkForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const ucp = document.getElementById('ucp_check').value.trim();
+    const res = await fetch('register.php', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+      body: 'action=check&ucp=' + encodeURIComponent(ucp)
+    });
+    const text = await res.text();
+    document.getElementById('result').innerHTML = text;
   });
   </script>
 </body>
